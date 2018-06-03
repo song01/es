@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Title</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet"></link>
+</head>
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div class="col-md-2 column">
+                </div>
+                <div class="col-md-6 column">
+            <form  class="form-horizontal" action="/get/nba/news" method="post">
+                <div class="form-group">
+
+                    <label for="query" class="col-sm-2 control-label">nba</label>
+                    <div class="col-sm-8">
+
+                        <input autocomplete="off" type="text" class="form-control" id="query" name="query" th:value="${query}" ></input>
+                    </div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-default">go</button></div>
+
+                </div>
+            </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p >查询结果为<span th:text="${page.resultNumber}"></span>个</p>
+
+    <div class="row clearfix" th:each="showPage : ${showPageList}">
+        <div class="col-md-12 column">
+
+            <p>
+            <a th:utext="${showPage.headline}" th:href="@{${showPage.url}}" target="_blank">
+
+            </a>
+            </p>
+            <p th:utext="${showPage.content}">
+
+            </p>
+
+            <p>
+               <span th:text="${showPage.time}"></span> <a th:text="${showPage.url}" th:href="@{${showPage.url}}" target="_blank"></a>
+            </p>
+
+            <br></br>
+            <br></br>
+            <br></br>
+
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <ul class="pagination">
+                <li th:if="${page.pageNow == 1} " class="disabled">
+                    <a class="disabled">上一页</a>
+                </li>
+
+                <li th:if="${page.pageNow gt 1} " >
+                    <a th:href="@{'/get/nba/news?pageNow='+${page.pageNow - 1}+'&amp;query='+${query}}">上一页</a>
+                </li>
+
+                <li th:each="pageNo : ${#numbers.sequence(1, page.pageNumber )}" >
+                    <a th:if="${page.pageNow  eq pageNo}" class="disabled">
+                        <span th:text="${pageNo}" class="label label-info"></span>
+                    </a>
+                    <a th:if="${not (page.pageNow  eq pageNo)}" th:href="@{${'/get/nba/news'}(pageNow=${pageNo},query=${query})}">
+                        <span th:text="${pageNo}"></span>
+                    </a>
+                </li>
+
+                <li th:if="${page.pageNow ==page.pageNumber} " class="disabled">
+                    <a class="disabled">下一页</a>
+                </li>
+
+                <li th:if="${page.pageNow lt page.pageNumber} " >
+                    <a th:href="@{'/get/nba/news?pageNow='+${page.pageNow + 1} + '&amp;query='+${query}}">下一页</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>
